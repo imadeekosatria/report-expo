@@ -1,30 +1,78 @@
+import { router } from "expo-router";
+import { useAuth } from "../context/AuthContext";
 import { useState } from "react";
-import { View, Image, TextInput, TouchableOpacity, Text } from "react-native"
+import { View, Image, TextInput, TouchableOpacity, Text, KeyboardAvoidingView, Platform } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const share = require("@/assets/images/share.png")
 
 export default function Index() {
-  const [username, onChangeUsername] = useState<string>()
-  const [password, onChangePassword] = useState<string>()
+  const [username, setUsername] = useState<string>('')
+  const [password, setPassword] = useState<string>('')
+
+  const { onLogin, onRegister } = useAuth()
+
+  const login = async () => {
+    const result = await onLogin!(username, password)
+    // console.log(result)
+    if (result & result.error) {
+      alert(result.msg)
+    }
+    // alert(username + password)
+    router.push("/home")
+  }
+
+  const register = async () => {
+    const result = await onRegister!(username, password)
+    if (result & result.error) {
+      alert(result.msg)
+    }else {
+      login()
+    }
+  }
+
+
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <View className="flex-1 items-center">
-        <Image
-          source={share}
-          className="w-60 h-60 my-8"
-          alt="Logo"
-        />
-        <View className="w-full gap-y-4 px-4">
-          <TextInput value={username} placeholder="Username" onChangeText={onChangeUsername} className="border rounded w-full border-[#92A6EB] border-collapse px-4" />
-          <TextInput value={password} secureTextEntry placeholder="Password" onChangeText={onChangePassword} className="border rounded w-full border-[#92A6EB] border-collapse px-4" />
+      <KeyboardAvoidingView 
+        behavior={Platform.OS === "ios" ? "padding" : "height"} 
+        className="flex-1"
+      >
+        <View className="flex-1 items-center justify-between">
+          <View className="w-full items-center">
+            <Image
+              source={share}
+              className="w-60 h-60 my-8"
+              alt="Logo"
+            />
+            <View className="w-full gap-y-4 px-4">
+              <TextInput 
+                value={username} 
+                placeholder="Username" 
+                onChangeText={(text: string) => setUsername(text)}
+                autoCapitalize="none" 
+                className="border rounded-xl w-full border-[#92A6EB] border-collapse px-4 h-12" 
+              />
+              <TextInput 
+                value={password} 
+                secureTextEntry 
+                placeholder="Password" 
+                onChangeText={(text: string) => setPassword(text)}
+                autoCapitalize="none" 
+                className="border rounded-xl w-full border-[#92A6EB] border-collapse px-4 h-12" 
+              />
+            </View>
+          </View>
+          <View className="p-4 w-full flex items-center">
+            <TouchableOpacity 
+              onPress={login} 
+              className="bg-[#2421A2] rounded-2xl w-full h-14 items-center justify-center shadow"
+            >
+              <Text className="text-white font-semibold text-2xl">Login</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-      <View className="p-4">
-        <TouchableOpacity onPress={()=>{console.log(username, password)}} className="bg-[#2421A2] rounded-2xl w-full h-20 items-center justify-center">
-          <Text className="text-white font-semibold">Login</Text>
-        </TouchableOpacity>
-      </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
