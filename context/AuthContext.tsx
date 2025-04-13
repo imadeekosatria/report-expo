@@ -1,6 +1,7 @@
 import * as SecureStore from 'expo-secure-store';
-import { Children, createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import axios from 'axios';
+import { router } from 'expo-router';
 
 interface AuthProps {
     authState?: { token: string | null; authenticated: boolean | null };
@@ -39,6 +40,7 @@ export const AuthProvider = ({ children }: any) => {
                     token: token,
                     authenticated: true,
                 })
+                router.replace('/home')
             }
         }
 
@@ -60,7 +62,7 @@ export const AuthProvider = ({ children }: any) => {
         try{
             const result =  await axios.post(`${API_URL}/api/users/login`, {username, password})
             
-            console.log(result)
+            // console.log(result)
             
             setAuthState({
                 token: result.data.data.token,
@@ -91,6 +93,8 @@ export const AuthProvider = ({ children }: any) => {
             token: null,
             authenticated: null,
         })
+
+        router.replace('/')
     }
 
     const value = {

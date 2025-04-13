@@ -14,17 +14,18 @@ export default function Index() {
 
   const login = async () => {
     const result = await onLogin!(username, password)
-    // console.log(result)
-    if (result & result.error) {
+    console.log(result)
+    if (result && result.error) {
       alert(result.msg)
+    }else{
+      router.push('/home')
     }
     // alert(username + password)
-    router.push("/home")
   }
 
   const register = async () => {
     const result = await onRegister!(username, password)
-    if (result & result.error) {
+    if (result && result.error) {
       alert(result.msg)
     }else {
       login()

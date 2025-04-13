@@ -1,7 +1,8 @@
-import { Stack } from "expo-router";
+import { router, Stack } from "expo-router";
 import { StatusBar } from 'expo-status-bar'
 import "../global.css"
 import { AuthProvider, useAuth } from "@/context/AuthContext";
+import { useEffect } from "react";
 
 
 export default function RootLayout() {
@@ -14,10 +15,16 @@ export default function RootLayout() {
 }
 
 export const Layout = () => {
-  const {authState, onLogout} = useAuth()
+  const {authState} = useAuth()
 
+  
   return (
-    <Stack>
+    <Stack 
+      initialRouteName={authState?.authenticated ? "(protected)" : "index"}      
+      screenOptions={{
+      headerShown: false,
+      gestureEnabled: false,
+    }}>
       {authState?.authenticated ? (
         <Stack.Screen
           name="(protected)"
