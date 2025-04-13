@@ -1,8 +1,7 @@
-import { router, Stack } from "expo-router";
+import { Stack } from "expo-router";
 import { StatusBar } from 'expo-status-bar'
 import "../global.css"
 import { AuthProvider, useAuth } from "@/context/AuthContext";
-import { useEffect } from "react";
 
 
 export default function RootLayout() {
