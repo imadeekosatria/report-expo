@@ -5,12 +5,12 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "reportexpo",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "config": {
+      "config":{
         "usesNonExemptEncryption": false
       }
     },
@@ -19,7 +19,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.imadeekosatria.reportexpo"
+      "edgeToEdgeEnabled": true
     },
     "web": {
       "bundler": "metro",
@@ -37,18 +37,16 @@
           "backgroundColor": "#ffffff"
         }
       ],
-      "expo-secure-store"
+      [
+        "expo-secure-store",
+        {
+          "configureAndroidBackup": true,
+          "faceIDPermission": "Allow $(PRODUCT_NAME) to access your Face ID biometric data."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
-    },
-    "extra": {
-      "router": {
-        "origin": false
-      },
-      "eas": {
-        "projectId": "db106ce2-5e62-44c7-b845-ba7dd1ed6bf9"
-      }
     }
   }
 }
