@@ -2,16 +2,23 @@ import { SplashScreen, useRouter } from "expo-router";
 import { createContext, PropsWithChildren, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SecureStore from "expo-secure-store";
-import axios, { isAxiosError } from "axios";
+import axios, { isAxiosError, isCancel } from "axios";
 import { Alert } from "react-native";
 
 
 SplashScreen.preventAutoHideAsync();
 
+type User = {
+    username: string;
+    name: string;
+    role: string;
+    authenticated: boolean;
+    token: string;
+}
+
 type AuthState = {
-    isLoggedIn: boolean;
     isReady: boolean;
-    token?: string;
+    user?: User;
     logIn: (username: string, password: string) => void;
     logOut: () => void;
 }
@@ -20,24 +27,27 @@ const authStorageKey = 'token'
 const authState = 'auth-state'
 
 export const AuthContext = createContext<AuthState>({
-    isLoggedIn: false,
     isReady: false,
-    token: undefined,
+    user: undefined,
     logIn: () => { },
     logOut: () => { }
 })
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
     const [isReady, setIsReady] = useState(false)
-    const [isLoggedIn, setIsLoggedIn] = useState(false)
-    const [token, setToken] = useState<string | undefined>(undefined)
+    // const [isLoggedIn, setIsLoggedIn] = useState(false)
+    // const [token, setToken] = useState<string | undefined>(undefined)
+    const [user, setUser] = useState<User | undefined>(undefined)
     const router = useRouter()
 
-    const storeAuthState = async (newState: { isLoggedIn: boolean, token: string }) => {
+    const storeAuthState = async (newState: { user: User | undefined }) => {
         try {
-            const jsonValue = JSON.stringify(newState.isLoggedIn);
+            const jsonValue = JSON.stringify(newState.user);
             await AsyncStorage.setItem(authState, jsonValue);
-            await SecureStore.setItemAsync(authStorageKey, newState.token)
+
+            if (newState.user?.token) {
+                await SecureStore.setItemAsync(authStorageKey, newState.user.token)
+            }
         } catch (error) {
             console.log("Error storing auth state", error)
             Alert.alert(
@@ -49,20 +59,62 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
     const logIn = async (username: string, password: string) => {
         try {
+            const controller = new AbortController()
+            const timeoutId = setTimeout(() => controller.abort(), 3000)
             const response = await axios.post(process.env.EXPO_PUBLIC_API_URL + '/users/login', {
                 username: username,
                 password: password
+            },
+            {
+                signal: controller.signal,
+                timeout: 3000,
             })
-            storeAuthState({ isLoggedIn: true, token: response.data.data.token })
-            setIsLoggedIn(true)
-            setToken(response.data.data.token)
-            router.replace('/home')
+            clearTimeout(timeoutId)
+
+            if (response.data.data) {
+                const userData: User = {
+                    username: response.data.data.username,
+                    name: response.data.data.name,
+                    role: response.data.data.role,
+                    authenticated: response.data.data.authenticated,
+                    token: response.data.data.token
+                }
+
+                await storeAuthState({ user: userData })
+                setUser(userData)
+                router.replace('/')
+            }
         } catch (error) {
+            if (isCancel(error)) {
+                Alert.alert(
+                    "Connection Timeout",
+                    "Request timed out. Please check your internet connection."
+                )
+                return
+            }
+    
             if (isAxiosError(error)) {
-                console.log("Error logging in", error.response?.data.errors)
+                if (!error.response) {
+                    // Network error (no internet connection)
+                    Alert.alert(
+                        "Network Error",
+                        "Tidak dapat terhubung ke server. Periksa koneksi internet Anda."
+                    )
+                    return
+                }
+    
+                if (error.code === 'ECONNABORTED') {
+                    Alert.alert(
+                        "Connection Error",
+                        "Request terlalu lama. Periksa koneksi internet Anda."
+                    )
+                    return
+                }
+    
+                // Server error with response
                 Alert.alert(
                     "Login Error",
-                    error.response?.data.errors
+                    "Tidak dapat login, silakan coba lagi. \nError: " + error.response?.data.errors
                 )
             }
         }
@@ -78,9 +130,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
                 console.log("Logout response", response.data)
             })
             SecureStore.deleteItemAsync(authStorageKey)
-            storeAuthState({ isLoggedIn: false, token: '' })
-            setIsLoggedIn(false)
-            setToken(undefined)
+            storeAuthState({ user: undefined})
             router.replace('/login')
         } catch (error) {
             console.log("Error logging out", error)
@@ -103,10 +153,10 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
                 const token = await SecureStore.getItemAsync(authStorageKey)
 
                 if (value !== null && token !== null) {
-                    setIsLoggedIn(JSON.parse(value))
-                    setToken(token)
+                    setUser(JSON.parse(value))
+                    // setToken(token)
                 } else {
-                    setIsLoggedIn(false)
+                    setUser(undefined)
                 }
             } catch (error) {
                 console.log("Error getting auth state", error)
@@ -129,7 +179,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
 
     return (
-        <AuthContext.Provider value={{ isLoggedIn, isReady, logIn, logOut, token }}>
+        <AuthContext.Provider value={{ isReady, logIn, logOut, user}}>
             {children}
         </AuthContext.Provider>
     )

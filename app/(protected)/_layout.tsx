@@ -1,5 +1,6 @@
 import { AuthContext, AuthProvider } from "@/utils/authContext";
 import { Redirect, Stack } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 import { useContext } from "react";
 
 export default function ProtectedLayout() {
@@ -9,15 +10,16 @@ export default function ProtectedLayout() {
         return null; // or a loading spinner
     }
 
-    if (!authState.isLoggedIn) {
+    if (!authState.user?.authenticated) {
         return <Redirect href="/login" />;
     }
 
 
     return (
         <AuthProvider>
+            <StatusBar style="auto" />
             <Stack>
-                <Stack.Screen name="home" options={{ headerShown: false }} />
+                <Stack.Screen name="index" options={{ headerShown: false }} />
             </Stack>
         </AuthProvider>
     )

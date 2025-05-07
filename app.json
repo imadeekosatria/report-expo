@@ -10,7 +10,7 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "config":{
+      "config": {
         "usesNonExemptEncryption": false
       }
     },
@@ -19,7 +19,8 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.imadeekosatria.reportexpo"
     },
     "web": {
       "bundler": "metro",
@@ -47,6 +48,13 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "51bc2430-f9cc-4db7-90ce-df4d39b99776"
+      }
+    },
+    "owner": "imadeekosatria"
   }
 }
