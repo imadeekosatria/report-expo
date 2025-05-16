@@ -42,7 +42,13 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
     const storeAuthState = async (newState: { user: User | undefined }) => {
         try {
-            const jsonValue = JSON.stringify(newState.user);
+            const userData = newState.user ? {
+                username: newState.user.username,
+                name: newState.user.name,
+                role: newState.user.role,
+                authenticated: newState.user.authenticated,
+            } : undefined
+            const jsonValue = JSON.stringify(userData);
             await AsyncStorage.setItem(authState, jsonValue);
 
             if (newState.user?.token) {
@@ -130,7 +136,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
                 console.log("Logout response", response.data)
             })
             SecureStore.deleteItemAsync(authStorageKey)
-            storeAuthState({ user: undefined})
+            await AsyncStorage.removeItem(authState)
             router.replace('/login')
         } catch (error) {
             console.log("Error logging out", error)

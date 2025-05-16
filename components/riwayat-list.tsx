@@ -1,4 +1,5 @@
 import { Platform, Text, useColorScheme, View } from "react-native";
+import '../global.css';
 
 export type Transaction = {
     id: number;
@@ -43,12 +44,12 @@ export const RiwayatSetoran = ({item} : {item: Transaction}) => {
     return (
         <View className="flex-row items-center justify-between w-full rounded-2xl">
             <View className="flex-row items-center gap-x-4">
-                <View className='flex gap-x-2'>
+                <View>
                     <Text className={`font-semibold text-lg ${themeText}`}>{item.name}</Text>
-                    <Text className="text-gray-500">{formatRelativeTime(item.date)}</Text>
+                    <Text className="text-gray-500 dark:text-slate-100">{formatRelativeTime(item.date)}</Text>
                 </View>
             </View>
-            <Text className="text-green-600 font-semibold">
+            <Text className="text-emerald-600 font-semibold">
                 {formatToIDR(item.amount)}
             </Text>
         </View>

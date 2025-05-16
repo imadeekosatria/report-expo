@@ -20,6 +20,12 @@ export default function ProtectedLayout() {
             <StatusBar style="auto" />
             <Stack>
                 <Stack.Screen name="index" options={{ headerShown: false }} />
+                <Stack.Screen name="tambah-setoran" options={{
+                    title: "Tambah Setoran",
+                    animation: "slide_from_right",   
+
+                }}
+                />
             </Stack>
         </AuthProvider>
     )
