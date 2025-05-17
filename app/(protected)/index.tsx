@@ -28,7 +28,7 @@ export default function HomeScreen() {
 
     
     return (
-        <SafeAreaView className={`flex w-full items-center h-full p-4 bg-slate-100 dark:bg-slate-800`}>
+        <SafeAreaView className={`flex w-full items-center h-full p-4 bg-slate-100 dark:bg-slate-950`}>
             <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} className="w-full h-full">
                 <View className="w-full flex-row items-center gap-2 mb-10">
                     <MaterialIcons name="account-circle" size={32} color={themeIcon} />
@@ -53,9 +53,7 @@ export default function HomeScreen() {
                         <RiwayatSetoran key={item.id} item={item} />
                     ))}
                 </View>
-
                 <Link href="/tambah-setoran" asChild>
-
                     <TouchableOpacity className="z-20 absolute bottom-10 right-0 bg-[#2421A2] rounded-full p-4">
                         <MaterialIcons name="add" size={24} color="white" />
                     </TouchableOpacity>

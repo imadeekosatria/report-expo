@@ -35,8 +35,6 @@ export const AuthContext = createContext<AuthState>({
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
     const [isReady, setIsReady] = useState(false)
-    // const [isLoggedIn, setIsLoggedIn] = useState(false)
-    // const [token, setToken] = useState<string | undefined>(undefined)
     const [user, setUser] = useState<User | undefined>(undefined)
     const router = useRouter()
 
