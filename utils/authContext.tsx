@@ -23,8 +23,8 @@ type AuthState = {
     logOut: () => void;
 }
 
-const authStorageKey = 'token'
-const authState = 'auth-state'
+export const authStorageKey = 'token'
+export const authState = 'auth-state'
 
 export const AuthContext = createContext<AuthState>({
     isReady: false,
