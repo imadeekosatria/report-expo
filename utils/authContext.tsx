@@ -69,10 +69,10 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
                 username: username,
                 password: password
             },
-            {
-                signal: controller.signal,
-                timeout: 3000,
-            })
+                {
+                    signal: controller.signal,
+                    timeout: 3000,
+                })
             clearTimeout(timeoutId)
 
             if (response.data.data) {
@@ -96,7 +96,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
                 )
                 return
             }
-    
+
             if (isAxiosError(error)) {
                 if (!error.response) {
                     // Network error (no internet connection)
@@ -106,7 +106,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
                     )
                     return
                 }
-    
+
                 if (error.code === 'ECONNABORTED') {
                     Alert.alert(
                         "Connection Error",
@@ -114,7 +114,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
                     )
                     return
                 }
-    
+
                 // Server error with response
                 Alert.alert(
                     "Login Error",
@@ -140,7 +140,17 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
             console.log("Error logging out", error)
             if (isAxiosError(error)) {
                 console.log("Error logging out", error.response?.data.errors)
-
+                const errorMessage = error.response?.data.errors
+                if (errorMessage === 'Unauthorized') {
+                    Alert.alert(
+                        "Logout Error",
+                        "You are not logged in. Please log in again."
+                    )
+                    SecureStore.deleteItemAsync(authStorageKey)
+                    await AsyncStorage.removeItem(authState)
+                    router.replace('/login')
+                    return
+                }
                 Alert.alert(
                     "Logout Error",
                     `An error occurred while logging out. \n${error.response?.data.errors}`
@@ -183,7 +193,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
 
     return (
-        <AuthContext.Provider value={{ isReady, logIn, logOut, user}}>
+        <AuthContext.Provider value={{ isReady, logIn, logOut, user }}>
             {children}
         </AuthContext.Provider>
     )

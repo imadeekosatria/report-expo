@@ -3,6 +3,7 @@ import { getSalesName } from "@/utils/salesApi";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useEffect, useMemo, useState } from "react";
 import { KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, TouchableOpacity, useColorScheme, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type SalesName = {
     id: string;
@@ -74,80 +75,82 @@ export default function TambahSetoranScreen() {
     }
 
     return (
-        <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} className="w-full h-full  bg-slate-100 dark:bg-slate-950">
-            <View className="flex-1 px-4">
-                <View className="w-full mx-auto mt-4 shadow-lg">
-                    <TextInput
-                        placeholder="Sales"
-                        onChangeText={setSales}
-                        value={sales}
-                        onFocus={handleInputFocus}
-                        className="w-full rounded-xl px-4 py-3 bg-white dark:text-white dark:bg-slate-700 dark:shadow-none shadow-black/5 elevation-3"
-                    />
-                </View>
-                {sales.trim() !== "" && isOpen && (
-                    <View className="mt-2 mx-4">
-                        <View className="bg-white dark:bg-slate-700 rounded-xl overflow-hidden shadow-sm">
-                            <ScrollView
-                                showsVerticalScrollIndicator={true}
-                                indicatorStyle={colorScheme === 'dark' ? 'white' : 'black'}
-                                className="max-h-40" // Maximum height of 10rem
-                                contentContainerStyle={{ flexGrow: 1 }}
-                            >
-                                {isLoading ? (
-                                    <View className="px-4 py-8">
-                                        <Text className="text-gray-500 dark:text-gray-400 text-center">
-                                            Memuat...
-                                        </Text>
-                                    </View>
-                                ) : error ? (
-                                    <View className="px-4 py-8">
-                                        <Text className="text-red-500 dark:text-red-400 text-center">
-                                            {error}
-                                        </Text>
-                                    </View>
-                                ) : filteredData.length > 0 ? (
-                                    filteredData.map((item, index) => (
-                                        <TouchableOpacity
-                                            key={item.id}
-                                            className={`py-2 px-4 ${index < filteredData.length - 1 &&
-                                                "border-b border-dashed border-gray-200 dark:border-slate-600"
-                                                }`}
-                                            onPress={() => handleSalesChange(item)}
-                                        >
-                                            <Text className="text-gray-800 dark:text-gray-100">
-                                                {item.name}
+        <SafeAreaView className="flex w-full h-full">
+            <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} className="w-full h-full bg-slate-100 dark:bg-slate-950">
+                <View className="flex-1 px-4">
+                    <View className="w-full mx-auto mt-4 shadow-lg">
+                        <TextInput
+                            placeholder="Sales"
+                            onChangeText={setSales}
+                            value={sales}
+                            onFocus={handleInputFocus}
+                            className="w-full rounded-xl px-4 py-3 bg-white dark:text-white dark:bg-slate-700 dark:shadow-none shadow-black/5 elevation-3"
+                        />
+                    </View>
+                    {sales.trim() !== "" && isOpen && (
+                        <View className="mt-2 mx-4">
+                            <View className="bg-white dark:bg-slate-700 rounded-xl overflow-hidden shadow-sm">
+                                <ScrollView
+                                    showsVerticalScrollIndicator={true}
+                                    indicatorStyle={colorScheme === 'dark' ? 'white' : 'black'}
+                                    className="max-h-40" // Maximum height of 10rem
+                                    contentContainerStyle={{ flexGrow: 1 }}
+                                >
+                                    {isLoading ? (
+                                        <View className="px-4 py-8">
+                                            <Text className="text-gray-500 dark:text-gray-400 text-center">
+                                                Memuat...
                                             </Text>
-                                        </TouchableOpacity>
-                                    ))
-                                ) : (
-                                    <View className="px-4 py-8">
-                                        <Text className="text-gray-500 dark:text-gray-400 text-center">
-                                            Tidak ada hasil ditemukan
-                                        </Text>
-                                    </View>
-                                )}
+                                        </View>
+                                    ) : error ? (
+                                        <View className="px-4 py-8">
+                                            <Text className="text-red-500 dark:text-red-400 text-center">
+                                                {error}
+                                            </Text>
+                                        </View>
+                                    ) : filteredData.length > 0 ? (
+                                        filteredData.map((item, index) => (
+                                            <TouchableOpacity
+                                                key={item.id}
+                                                className={`py-2 px-4 ${index < filteredData.length - 1 &&
+                                                    "border-b border-dashed border-gray-200 dark:border-slate-600"
+                                                    }`}
+                                                onPress={() => handleSalesChange(item)}
+                                            >
+                                                <Text className="text-gray-800 dark:text-gray-100">
+                                                    {item.name}
+                                                </Text>
+                                            </TouchableOpacity>
+                                        ))
+                                    ) : (
+                                        <View className="px-4 py-8">
+                                            <Text className="text-gray-500 dark:text-gray-400 text-center">
+                                                Tidak ada hasil ditemukan
+                                            </Text>
+                                        </View>
+                                    )}
 
-                            </ScrollView>
+                                </ScrollView>
+                            </View>
                         </View>
+                    )}
+                    {selectedSales && (
+                        <Text className="dark:text-white mx-4 mt-2">
+                            Selected: {selectedSales.name}
+                        </Text>
+                    )}
+                    {openSheet === false && (
+                        <TouchableOpacity onPress={() => { handleSheetChange(true) }} className="z-20 absolute bottom-10 right-4 bg-[#2421A2] rounded-full p-4">
+                            <MaterialIcons name="add" size={24} color="white" />
+                        </TouchableOpacity>
+                    )}
+                {openSheet && (
+                    <View className="w-full h-full ">
+                        <BottomSheetSetoran setOpenSheet={setOpenSheet} />
                     </View>
                 )}
-                {selectedSales && (
-                    <Text className="dark:text-white mx-4 mt-2">
-                        Selected: {selectedSales.name}
-                    </Text>
-                )}
-                {openSheet === false && (
-                    <TouchableOpacity onPress={() => { handleSheetChange(true) }} className="z-20 absolute bottom-10 right-4 bg-[#2421A2] rounded-full p-4">
-                        <MaterialIcons name="add" size={24} color="white" />
-                    </TouchableOpacity>
-                )}
-            {openSheet && (
-                <View className="w-full h-full ">
-                    <BottomSheetSetoran setOpenSheet={setOpenSheet} />
                 </View>
-            )}
-            </View>
-        </KeyboardAvoidingView>
+            </KeyboardAvoidingView>
+        </SafeAreaView>
     );
 }
