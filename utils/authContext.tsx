@@ -86,9 +86,15 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
                 await storeAuthState({ user: userData })
                 setUser(userData)
-                router.replace('/')
+                if (userData.role === 'SUPER_ADMIN') {
+                    router.replace('/')
+                }else if (userData.role === 'ADMIN') {
+                    router.replace('/home')
+                }
+                
             }
         } catch (error) {
+            console.log(error)
             if (isCancel(error)) {
                 Alert.alert(
                     "Connection Timeout",
@@ -126,12 +132,17 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
     const logOut = async () => {
         try {
+            const controller = new AbortController()
+            const timeoutId = setTimeout(() => controller.abort(), 3000)
             await axios.delete(process.env.EXPO_PUBLIC_API_URL + '/users/current', {
                 headers: {
                     'Authorization': `${await SecureStore.getItemAsync(authStorageKey)}`
-                }
+                },
+                signal: controller.signal,
+                timeout: 3000,
             }).then((response) => {
                 console.log("Logout response", response.data)
+                clearTimeout(timeoutId)
             })
             SecureStore.deleteItemAsync(authStorageKey)
             await AsyncStorage.removeItem(authState)

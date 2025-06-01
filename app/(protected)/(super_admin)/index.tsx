@@ -66,7 +66,7 @@ export default function HomeScreen() {
 
 
 
-const data: Transaction[] = [
+export const data: Transaction[] = [
     { id: 1, name: 'Budi', amount: 1500000, date: new Date('2025-04-13T10:00:00') },
     { id: 2, name: 'Siti', amount: 2000000, date: new Date('2024-04-12T14:30:00') },
     { id: 3, name: 'Joko', amount: 2500000, date: new Date('2024-04-11T09:15:00') },

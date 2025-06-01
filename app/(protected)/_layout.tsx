@@ -7,7 +7,7 @@ import { useColorScheme } from "react-native";
 export default function ProtectedLayout() {
     const authState = useContext(AuthContext);
     const colorScheme = useColorScheme();
-
+    
     if (!authState.isReady) {
         return null; // or a loading spinner
     }
@@ -16,11 +16,13 @@ export default function ProtectedLayout() {
         return <Redirect href="/login" />;
     }
 
+
     return (
        <>
             <StatusBar style="auto" />
             <Stack>
-                <Stack.Screen name="index" options={{ headerShown: false }} />
+                <Stack.Screen name="(admin)" options={{ headerShown: false }} />
+                <Stack.Screen name="(super_admin)" options={{ headerShown: false }} />
                 <Stack.Screen name="tambah-setoran" options={{
                     title: "Tambah Setoran",
                     animation: "slide_from_right",
