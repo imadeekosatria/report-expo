@@ -75,8 +75,8 @@ export default function TambahSetoranScreen() {
     }
 
     return (
-        <SafeAreaView className="flex w-full h-full">
-            <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} className="w-full h-full bg-slate-100 dark:bg-slate-950">
+        <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} className="w-full h-full pb-4">
+            <SafeAreaView className="flex w-full h-full bg-slate-100 dark:bg-slate-950">
                 <View className="flex-1 px-4">
                     <View className="w-full mx-auto mt-4 shadow-lg">
                         <TextInput
@@ -144,13 +144,13 @@ export default function TambahSetoranScreen() {
                             <MaterialIcons name="add" size={24} color="white" />
                         </TouchableOpacity>
                     )}
-                {openSheet && (
-                    <View className="w-full h-full ">
-                        <BottomSheetSetoran setOpenSheet={setOpenSheet} />
-                    </View>
-                )}
+                    {openSheet && (
+                        <View className="w-full h-full ">
+                            <BottomSheetSetoran setOpenSheet={setOpenSheet} />
+                        </View>
+                    )}
                 </View>
-            </KeyboardAvoidingView>
-        </SafeAreaView>
+            </SafeAreaView>
+        </KeyboardAvoidingView>
     );
 }

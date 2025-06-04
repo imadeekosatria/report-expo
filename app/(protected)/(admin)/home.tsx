@@ -4,7 +4,7 @@ import { Link } from "expo-router";
 import { useContext, useMemo } from "react";
 import { KeyboardAvoidingView, Platform, Text, TouchableOpacity, useColorScheme, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { data } from "../(super_admin)";
+import { data } from "../(super_admin)/super_admin_home";
 import { RiwayatSetoran } from "@/components/riwayat-list";
 
 export default function AdminScreen(){

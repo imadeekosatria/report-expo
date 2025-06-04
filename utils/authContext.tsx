@@ -87,7 +87,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
                 await storeAuthState({ user: userData })
                 setUser(userData)
                 if (userData.role === 'SUPER_ADMIN') {
-                    router.replace('/')
+                    router.replace('/super_admin_home')
                 }else if (userData.role === 'ADMIN') {
                     router.replace('/home')
                 }

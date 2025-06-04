@@ -19,7 +19,7 @@ export default function SuperAdminLayout() {
        <>
             <StatusBar style="auto" />
             <Stack>
-                <Stack.Screen name="index" options={{ headerShown: false }} />
+                <Stack.Screen name="super_admin_home" options={{ headerShown: false }} />
             </Stack>
        </>
     )
