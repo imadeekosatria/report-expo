@@ -1,5 +1,6 @@
 import { AuthContext } from "@/utils/authContext";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { Link } from "expo-router";
 import { useContext, useRef, useState } from "react";
 import { Alert, Animated, KeyboardAvoidingView, Platform, Text, TextInput, TouchableOpacity, useColorScheme, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -51,7 +52,7 @@ export default function LoginScreen() {
         paddingTop: 12,
       }}
     >
-      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding": "height"} className="flex items-center w-full h-full" keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 100}>
+      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding": "height"} className="flex items-center w-full h-full" keyboardVerticalOffset={100}>
         {/* <View className="mb-10">
           <Image source={require("../assets/images/share.png")} className="w-56 h-56" />
         </View> */}
@@ -103,7 +104,11 @@ export default function LoginScreen() {
                 </Animated.View>
               </TouchableOpacity>
             </View>
-            <Text className="text-right font-medium" style={{color:'#2563eb'}}>Lupa kata sandi?</Text>
+            <Link href="/reset" asChild>
+              <TouchableOpacity className="w-full mt-2" style={{alignItems:'flex-end'}}>
+                <Text className="font-medium" style={{color:'#2563eb'}}>Lupa kata sandi?</Text>
+              </TouchableOpacity>
+            </Link>
           </View>
         </View>
         <TouchableOpacity className="w-full my-8 bg-blue-600 rounded-xl p-4 flex items-center justify-center" onPress={handleLogin}>

@@ -10,11 +10,11 @@ type Props = {
 
 export const BottomSheetSetoran = ({ setOpenSheet }: Props) => {
     const colorScheme = useColorScheme();
-    const snapPoints = useMemo(() => ['50%', '70'], []);
+    const snapPoints = useMemo(() => ['80', '95'], []);
     const bottomSheetRef = useRef<BottomSheet>(null)
     const [pressed, setPressed] = useState<boolean>(false);
 
-
+    const [produk, setProduk] = useState<string>('');
     const handleSheetChange = useCallback((index: number) => {
         console.log('handleSheetChange', index);
         setOpenSheet(index === -1 ? false : true);
@@ -32,7 +32,7 @@ export const BottomSheetSetoran = ({ setOpenSheet }: Props) => {
                     <BottomSheetView style={{ paddingTop: 20, paddingLeft: 20, paddingRight: 20 }} className='flex h-full'>
                         <View>
                             <Text className='text-xl'>Nama Produk</Text>
-                            <TextInput placeholder='Masukkan nama produk' style={{
+                            <TextInput placeholder='Masukkan nama produk' onChangeText={setProduk} style={{
                                 backgroundColor: '#cbd5e1',
                                 borderRadius: 10,
                                 paddingStart: 15,
@@ -43,6 +43,11 @@ export const BottomSheetSetoran = ({ setOpenSheet }: Props) => {
                             }}
                                 placeholderTextColor={colorScheme === 'dark' ? 'white' : 'gray'}
                             />
+                            {produk.trim() !== '' && (
+                                <View className='mt-2'>
+                                    <Text className='text-gray-500'>Produk: {produk}</Text>
+                                </View>
+                            )}
                         </View>
                         <View className='z-20 absolute top-20 left-0 right-0'>
                             <Text className='text-xl'>Satuan</Text>

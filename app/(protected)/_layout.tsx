@@ -33,9 +33,10 @@ export default function ProtectedLayout() {
                     title: "Tambah Setoran",
                     animation: "slide_from_right",
                     headerStyle: {
-                        backgroundColor: colorScheme === 'dark' ? "#020617" : "#f1f5f9",
+                        backgroundColor: colorScheme === "dark" ? "#1e293b" : "#fff",
                     },
-                    headerTintColor: colorScheme === 'dark' ? "white" : "#020617",
+                    headerTintColor: colorScheme === "dark" ? "#fff" : "#1e293b",
+                    // headerShadowVisible: false
                 }}
                 />
             </Stack>

@@ -1,10 +1,10 @@
+import { RiwayatSetoran, Transaction } from "@/components/riwayat-list";
 import { AuthContext } from "@/utils/authContext";
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { Link } from "expo-router";
 import { useContext, useMemo } from "react";
 import { KeyboardAvoidingView, Platform, Text, TouchableOpacity, useColorScheme, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { Link } from "expo-router";
-import { RiwayatSetoran, Transaction } from "@/components/riwayat-list";
 
 
 
@@ -28,7 +28,13 @@ export default function HomeScreen() {
 
     
     return (
-        <SafeAreaView className={`flex w-full items-center h-full p-4 bg-slate-100 dark:bg-slate-950`}>
+        <SafeAreaView 
+            style={{
+            flex: 1,
+            backgroundColor: colorScheme === "dark" ? "#1e293b" : "#fff", // #0f172a is a good dark background
+            paddingHorizontal: 20,
+            paddingTop: 12,
+        }}>
             <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} className="w-full h-full">
                 <View className="w-full flex-row items-center gap-2 mb-10">
                     <MaterialIcons name="account-circle" size={32} color={themeIcon} />
@@ -54,9 +60,25 @@ export default function HomeScreen() {
                     ))}
                 </View>
                 <Link href="/tambah-setoran" asChild>
-                    <TouchableOpacity className="z-20 absolute bottom-10 right-0 bg-[#2421A2] rounded-full p-4">
-                        <MaterialIcons name="add" size={24} color="white" />
-                    </TouchableOpacity>
+                  <TouchableOpacity
+                    style={{
+                      position: "absolute",
+                      bottom: 32,
+                      right: 0,
+                      backgroundColor: "#2421A2",
+                      borderRadius: 32,
+                      padding: 18,
+                      elevation: 6,
+                      shadowColor: "#2421A2",
+                      shadowOpacity: 0.3,
+                      shadowRadius: 8,
+                      shadowOffset: { width: 0, height: 4 },
+                      zIndex: 20,
+                    }}
+                    activeOpacity={0.85}
+                  >
+                    <MaterialIcons name="add" size={28} color="white" />
+                  </TouchableOpacity>
                 </Link>
             </KeyboardAvoidingView>
         </SafeAreaView>

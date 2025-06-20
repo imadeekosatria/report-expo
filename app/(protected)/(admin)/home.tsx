@@ -25,7 +25,7 @@ export default function AdminScreen(){
 
 
     return (
-        <SafeAreaView className={`flex w-full items-center h-full p-4 bg-slate-100 dark:bg-slate-950`}>
+        <SafeAreaView className={`flex w-full items-center h-full bg-slate-100 dark:bg-slate-950`} style={{ paddingHorizontal: 20, paddingTop: 12 }}>
             <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} className="w-full h-full">
                 <View className="w-full flex-row items-center gap-2 mb-10">
                     <MaterialIcons name="account-circle" size={32} color={themeIcon} />
