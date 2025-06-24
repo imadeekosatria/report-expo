@@ -21,7 +21,12 @@ export default function ProtectedLayout() {
         : authState.user?.role === 'SUPER_ADMIN'
             ? '(super_admin)'
             : undefined;
-
+    if (authState.user?.role === 'ADMIN' && !userRole) {
+        return <Redirect href="/(protected)/(admin)/home" />;
+    }
+    if (authState.user?.role === 'SUPER_ADMIN' && !userRole) {
+        return <Redirect href="/(protected)/(super_admin)/super_admin_home" />;
+    }
 
     return (
         <>

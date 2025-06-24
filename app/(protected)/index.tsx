@@ -4,12 +4,10 @@ import { useContext } from "react";
 
 export default function ProtectedIndex() {
     const { user } = useContext(AuthContext);
+    // console.log(user)
     if (user?.role === 'ADMIN') {
         return <Redirect href="/(protected)/(admin)/home" />;    
     }else if (user?.role === 'SUPER_ADMIN') {
         return <Redirect href="/(protected)/(super_admin)/super_admin_home" />;
-    }else{
-        return <Redirect href="/login" />;
-    }
-    
+    }   
 }

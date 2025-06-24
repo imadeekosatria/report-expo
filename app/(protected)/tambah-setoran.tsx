@@ -3,14 +3,14 @@ import { getSalesName } from "@/utils/salesApi";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useEffect, useMemo, useState } from "react";
 import {
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    useColorScheme,
-    View,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  useColorScheme,
+  View,
 } from "react-native";
 
 type SalesName = {
@@ -94,7 +94,6 @@ export default function TambahSetoranScreen() {
         <View
           style={{
             flex: 1,
-            paddingTop: 0,
             justifyContent: "flex-start",
           }}
         >
@@ -265,7 +264,7 @@ export default function TambahSetoranScreen() {
             onPress={() => handleSheetChange(true)}
             style={{
               position: "absolute",
-              bottom: 44, // changed from 32 to 16 for better alignment with header present
+              bottom: Platform.OS === "android" ? 60 : 32, // More space on Android
               right: 24,
               backgroundColor: "#2421A2",
               borderRadius: 32,
