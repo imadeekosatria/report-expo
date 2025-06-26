@@ -73,11 +73,9 @@ export const BottomSheetSetoran = ({ setOpenSheet, setSetoranProduk }: Props) =>
             : selectedProduct.harga ?? 0;
 
         const produkBaru = {
-            ...selectedProduct,
-            // id: selectedProduct.id,
-            // name: selectedProduct.name,
+            ...selectedProduct,            
             jumlah: Number(jumlah),
-            harga,
+            harga: harga,
             subtotal: Number(jumlah) * harga,
         };
         setSetoranProduk?.(produkBaru); // Call the optional callback if provided
