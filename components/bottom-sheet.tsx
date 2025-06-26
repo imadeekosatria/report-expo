@@ -6,9 +6,10 @@ import { getAllProducts } from "../utils/produkApi"; // 1. Import your API
 
 type Props = {
     setOpenSheet: (value: boolean) => void;
+    setSetoranProduk?: (produk: any) => void; // Optional callback to set produk
 }
 
-export const BottomSheetSetoran = ({ setOpenSheet }: Props) => {
+export const BottomSheetSetoran = ({ setOpenSheet, setSetoranProduk }: Props) => {
     const colorScheme = useColorScheme();
     const snapPoints = useMemo(() => ['70%', '95%'], []);
     const bottomSheetRef = useRef<BottomSheet>(null)
@@ -21,6 +22,7 @@ export const BottomSheetSetoran = ({ setOpenSheet }: Props) => {
     const [productList, setProductList] = useState<any[]>([]);
     const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
     const [loadingProducts, setLoadingProducts] = useState(false);
+    const [jumlah, setJumlah] = useState<string>('1');
 
     // 2. Fetch and store full product objects
     useEffect(() => {
@@ -56,6 +58,42 @@ export const BottomSheetSetoran = ({ setOpenSheet }: Props) => {
         console.log('handleSheetChange', index);
         setOpenSheet(index === -1 ? false : true);
     }, [setOpenSheet])
+
+    const handleTambahProduk = () => {
+        if (!selectedProduct) {
+            alert("Pilih produk terlebih dahulu");
+            return;
+        }
+        if (!jumlah || isNaN(Number(jumlah)) || Number(jumlah) <= 0) {
+            alert("Masukkan jumlah yang valid");
+            return;
+        }
+        const harga = useHargaSatuan
+            ? selectedProduct.harga_satuan ?? selectedProduct.harga ?? 0
+            : selectedProduct.harga ?? 0;
+
+        const produkBaru = {
+            ...selectedProduct,
+            // id: selectedProduct.id,
+            // name: selectedProduct.name,
+            jumlah: Number(jumlah),
+            harga,
+            subtotal: Number(jumlah) * harga,
+        };
+        setSetoranProduk?.(produkBaru); // Call the optional callback if provided
+        // console.log("Produk baru ditambahkan:", produkBaru);
+        // TODO: Kirim produkBaru ke parent, Redux, Context, atau array produk
+        // Misal: onTambahProduk(produkBaru);
+
+        // Reset form (optional)
+        setSelectedProduct(null);
+        setProduk("");
+        setIsProductSelected(false);
+        setJumlah("1");
+        setUseHargaSatuan(false);
+        setOpenSheet(false);
+    };
+
     return (
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} className="w-full h-full">
             <GestureHandlerRootView style={{ flex: 1 }} className='w-full absolute'>
@@ -214,6 +252,8 @@ export const BottomSheetSetoran = ({ setOpenSheet }: Props) => {
                                     }}
                                     placeholderTextColor="#64748b"
                                     keyboardType="numeric"
+                                    value={jumlah}
+                                    onChangeText={setJumlah}
                                 />
                             </View>
                             <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
@@ -268,7 +308,7 @@ export const BottomSheetSetoran = ({ setOpenSheet }: Props) => {
                         )}
 
                         {/* Tambah Button */}
-                        <TouchableOpacity style={{ marginTop: "auto" }}>
+                        <TouchableOpacity style={{ marginTop: "auto" }} onPress={handleTambahProduk}>
                             <View
                                 style={{
                                     backgroundColor: "#2421A2",

@@ -14,32 +14,32 @@ export default function LoginScreen() {
   const [showPassword, setShowPassword] = useState(false);
   const iconAnim = useRef(new Animated.Value(1)).current;
 
-  const handleLogin = async() =>{
+  const handleLogin = async () => {
     if (!username || !password) {
-        Alert.alert("Invalid Input", "Please enter a username and password", [{text: "OK"}])
-        return;
+      Alert.alert("Invalid Input", "Please enter a username and password", [{ text: "OK" }])
+      return;
     }
     context.logIn(username, password)
   }
 
   const handleTogglePassword = () => {
-  // Animate out
-  Animated.sequence([
-    Animated.timing(iconAnim, {
-      toValue: 0,
-      duration: 100,
-      useNativeDriver: true,
-    }),
-    Animated.timing(iconAnim, {
-      toValue: 1,
-      duration: 100,
-      useNativeDriver: true,
-    }),
-  ]).start();
-  setShowPassword((prev) => !prev);
-}
+    // Animate out
+    Animated.sequence([
+      Animated.timing(iconAnim, {
+        toValue: 0,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+      Animated.timing(iconAnim, {
+        toValue: 1,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+    ]).start();
+    setShowPassword((prev) => !prev);
+  }
   const colorScheme = useColorScheme();
-  
+
   const themeText = Platform.OS === "android" && colorScheme === "dark" ? "text-slate-100" : "text-slate-900";
 
   const themeBorder = Platform.OS === "android" && colorScheme === "dark" ? "border-slate-100" : "border-slate-600";
@@ -52,7 +52,7 @@ export default function LoginScreen() {
         paddingTop: 12,
       }}
     >
-      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding": "height"} className="flex items-center w-full h-full" keyboardVerticalOffset={100}>
+      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} className="flex items-center w-full h-full" keyboardVerticalOffset={100}>
         {/* <View className="mb-10">
           <Image source={require("../assets/images/share.png")} className="w-56 h-56" />
         </View> */}
@@ -105,8 +105,8 @@ export default function LoginScreen() {
               </TouchableOpacity>
             </View>
             <Link href="/reset" asChild>
-              <TouchableOpacity className="w-full mt-2" style={{alignItems:'flex-end'}}>
-                <Text className="font-medium" style={{color:'#2563eb'}}>Lupa kata sandi?</Text>
+              <TouchableOpacity className="w-full mt-2" style={{ alignItems: 'flex-end' }}>
+                <Text className="font-medium" style={{ color: '#2563eb' }}>Lupa kata sandi?</Text>
               </TouchableOpacity>
             </Link>
           </View>
